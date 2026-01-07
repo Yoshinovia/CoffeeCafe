@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -16,9 +17,13 @@ class UserController extends Controller
         if(auth()->guard()->attempt(['email' => $inFields['email'], 'password' => $inFields['password']])){
             request()->session()->regenerate();
 
-            if (auth()->guard()->user()->role === 'admin') {
-                return redirect('/ahome');
-            }
+            $user = Auth::user();
+
+            return match ($user->role) {
+                'admin' => redirect()->route('admin.inventory.index'),
+                'kasir' => redirect()->route('kasir.dashboard'),
+                default => redirect('/'),
+            };
         }
         return redirect('/');
     }

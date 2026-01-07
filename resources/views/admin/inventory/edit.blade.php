@@ -19,7 +19,7 @@
             </a>
         </div>
         <div class="p-6">
-            <form action="{{ route('admin.inventory.update', $rawMaterial) }}" method="POST">
+            <form action="{{ route('admin.inventory.update', $inventory) }}" method="POST">
                 @csrf
                 @method('PUT')
 
@@ -28,7 +28,7 @@
                     <label for="name" class="block text-sm font-medium text-gray-700">Nama Bahan Baku</label>
                     <input type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm 
                         @error('name') border-red-500 @enderror" 
-                        id="name" name="name" value="{{ old('name', $rawMaterial->name) }}" required>
+                        id="name" name="name" value="{{ old('name', $inventory->name) }}" required>
                     @error('name')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -39,7 +39,7 @@
                     <label for="unit" class="block text-sm font-medium text-gray-700">Satuan (Contoh: ml, gram, liter, kg)</label>
                     <input type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
                         @error('unit') border-red-500 @enderror" 
-                        id="unit" name="unit" value="{{ old('unit', $rawMaterial->unit) }}" required>
+                        id="unit" name="unit" value="{{ old('unit', $inventory->unit) }}" required>
                     @error('unit')
                         <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -51,7 +51,7 @@
                         <label for="stock" class="block text-sm font-medium text-gray-700">Stok</label>
                         <input type="number" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
                             @error('stock') border-red-500 @enderror" 
-                            id="stock" name="stock" value="{{ old('stock', $rawMaterial->stock) }}" required min="0">
+                            id="stock" name="stock" value="{{ old('stock', $inventory->stock) }}" required min="0">
                         @error('stock')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror
@@ -62,7 +62,7 @@
                         <label for="min_stock_alert" class="block text-sm font-medium text-gray-700">Batas Minimum Notifikasi Stok</label>
                         <input type="number" step="0.01" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm
                             @error('min_stock_alert') border-red-500 @enderror" 
-                            id="min_stock_alert" name="min_stock_alert" value="{{ old('min_stock_alert', $rawMaterial->min_stock_alert) }}" required min="0">
+                            id="min_stock_alert" name="min_stock_alert" value="{{ old('min_stock_alert', $inventory->min_stock_alert) }}" required min="0">
                         @error('min_stock_alert')
                             <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
                         @enderror

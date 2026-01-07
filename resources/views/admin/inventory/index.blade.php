@@ -50,61 +50,66 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach ($rawMaterials as $rawMaterial)
-                                <tr class="hover:bg-gray-100 transition duration-150 ease-in-out">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                        {{ $loop->iteration }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $rawMaterial->name }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ number_format($rawMaterial->stock, 2) }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ $rawMaterial->unit }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
-                                        {{ number_format($rawMaterial->min_stock_alert, 2) }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        {{-- Menggunakan kelas status yang lebih konsisten --}}
-                                        @php
-                                            // Asumsi: Anda memiliki logika di model atau helper untuk menentukan kelas
-                                            // Contoh implementasi kasar di sini:
-                                            $badgeClass = 'bg-gray-100 text-gray-800';
-                                            if ($rawMaterial->stock < $rawMaterial->min_stock_alert) {
-                                                $badgeClass = 'bg-red-100 text-red-800'; // Stok rendah
-                                            } elseif ($rawMaterial->stock <= $rawMaterial->min_stock_alert * 1.5) {
-                                                $badgeClass = 'bg-yellow-100 text-yellow-800'; // Stok mendekati min
-                                            } else {
-                                                $badgeClass = 'bg-green-100 text-green-800'; // Stok aman
-                                            }
-                                            // Catatan: Jika Anda menggunakan $rawMaterial->stock_status_badge_class, pastikan kelas tersebut adalah kelas Tailwind yang valid.
-                                            // Kita menggunakan $badgeClass di sini sebagai fallback/contoh.
-                                        @endphp
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $badgeClass }}">
-                                            {{-- Menggunakan $rawMaterial->stock_status jika tersedia, jika tidak menggunakan logika sederhana --}}
-                                            {{ $rawMaterial->stock_status ?? ($rawMaterial->stock < $rawMaterial->min_stock_alert ? 'Rendah' : 'Aman') }}
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium flex items-center">
-                                        <a href="{{ route('admin.inventory.edit', $rawMaterial) }}"
-                                            class="text-indigo-600 hover:text-indigo-900 transition duration-150 ease-in-out mr-4">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('admin.inventory.destroy', $rawMaterial) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus bahan baku {{ $rawMaterial->name }}? Aksi ini tidak dapat dibatalkan.');">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"
-                                                class="text-red-600 hover:text-red-900 transition duration-150 ease-in-out cursor-pointer"
-                                                title="Hapus">Delete
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
+    @foreach ($inventory as $inventoryItem)
+        <tr class="hover:bg-gray-100 transition duration-150 ease-in-out">
+            <td class="px-6 py-4 text-sm">
+                {{ $loop->iteration }}
+            </td>
+
+            <td class="px-6 py-4 text-sm">
+                {{ $inventoryItem->name }}
+            </td>
+
+            <td class="px-6 py-4 text-sm">
+                {{ number_format($inventoryItem->stock, 2) }}
+            </td>
+
+            <td class="px-6 py-4 text-sm">
+                {{ $inventoryItem->unit }}
+            </td>
+
+            <td class="px-6 py-4 text-sm">
+                {{ number_format($inventoryItem->min_stock_alert, 2) }}
+            </td>
+
+            <td class="px-6 py-4 whitespace-nowrap">
+                @php
+                    $badgeClass = 'bg-green-100 text-green-800';
+
+                    if ($inventoryItem->stock < $inventoryItem->min_stock_alert) {
+                        $badgeClass = 'bg-red-100 text-red-800';
+                    } elseif ($inventoryItem->stock <= $inventoryItem->min_stock_alert * 1.5) {
+                        $badgeClass = 'bg-yellow-100 text-yellow-800';
+                    }
+                @endphp
+
+                <span class="px-2 inline-flex text-xs font-semibold rounded-full {{ $badgeClass }}">
+                    {{ $inventoryItem->stock < $inventoryItem->min_stock_alert ? 'Rendah' : 'Aman' }}
+                </span>
+            </td>
+
+            <td class="px-6 py-4 text-center text-sm font-medium flex items-center">
+                <a href="{{ route('admin.inventory.edit', $inventoryItem) }}"
+                   class="text-indigo-600 hover:text-indigo-900 mr-4">
+                    Edit
+                </a>
+
+                <form action="{{ route('admin.inventory.destroy', $inventoryItem) }}"
+                      method="POST"
+                      onsubmit="return confirm('Hapus {{ $inventoryItem->name }}?')">
+                    @csrf
+                    @method('DELETE')
+
+                    <button type="submit"
+                            class="text-red-600 hover:text-red-900">
+                        Delete
+                    </button>
+                </form>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
                     </table>
                 </div>
             </div>

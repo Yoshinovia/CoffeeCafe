@@ -4,8 +4,10 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\RecipeController;
+
+use App\Http\Controllers\Kasir\KasirController;
+use App\Http\Controllers\Admin\InventoryController;
 
 Route::get('/', function () {
     return view('login');
@@ -15,29 +17,86 @@ Route::get('/ahome', function () {
     return view('admin.home');
 })->middleware('admin');
 
-Route::get('/inventory', [InventoryController::class, 'index'])->middleware('admin')->name('admin.inventory.index');
-Route::get('/inventory/create', [InventoryController::class, 'create'])->middleware('admin')->name('admin.inventory.create');
-Route::get('/inventory/{rawMaterial}/edit', [InventoryController::class, 'edit'])->middleware('admin')->name('admin.inventory.edit');
-Route::put('/inventory/{rawMaterial}', [InventoryController::class, 'update'])->middleware('admin')->name('admin.inventory.update');
-Route::post('/inventory', [InventoryController::class, 'store'])->middleware('admin')->name('admin.inventory.store');
-Route::delete('/inventory/{rawMaterial}', [InventoryController::class, 'destroy'])->middleware('admin')->name('admin.inventory.destroy');
+/*
+|--------------------------------------------------------------------------
+| Kasir Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'kasir'])
+    ->prefix('kasir')
+    ->name('kasir.')
+    ->group(function () {
+        Route::get('/', [KasirController::class, 'dashboard'])
+            ->name('dashboard');
+    });
 
+/*
+|--------------------------------------------------------------------------
+| Auth Routes
+|--------------------------------------------------------------------------
+*/
+Route::post('/login', [UserController::class, 'login'])->name('login');
+Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
-Route::get('/menu', [MenuController::class, 'index'])->middleware('admin')->name('admin.menu.index');
-Route::get('/menu/create', [MenuController::class, 'create'])->middleware('admin')->name('admin.menu.create');
-Route::post('/menu', [MenuController::class, 'store'])->middleware('admin')->name('admin.menu.store');
-Route::get('/menu/{menu}/edit', [MenuController::class, 'edit'])->middleware('admin')->name('admin.menu.edit');
-Route::put('/menu/{menu}/edit', [MenuController::class, 'update'])->middleware('admin')->name('admin.menu.update');
-Route::delete('/menu/{menu}', [MenuController::class, 'destroy'])->middleware('admin')->name('admin.menu.destroy');
+/*
+|--------------------------------------------------------------------------
+| Admin Routes
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+    
+    /*
+    | Inventory
+    */
+    Route::resource('inventory', InventoryController::class)
+        ->except(['show'])
+        ->names([
+            'index'   => 'inventory.index',
+            'create'  => 'inventory.create',
+            'store'   => 'inventory.store',
+            'edit'    => 'inventory.edit',
+            'update'  => 'inventory.update',
+            'destroy' => 'inventory.destroy',
+        ]);
 
+    /*
+    | Menu
+    */
+    Route::resource('menu', MenuController::class)
+        ->except(['show'])
+        ->names([
+            'index'   => 'menu.index',
+            'create'  => 'menu.create',
+            'store'   => 'menu.store',
+            'edit'    => 'menu.edit',
+            'update'  => 'menu.update',
+            'destroy' => 'menu.destroy',
+        ]);
 
-Route::get('/recipe/create/{menu}', [RecipeController::class, 'create'])->middleware('admin')->name('admin.menu.recipe.create');
-Route::post('/recipe/create/{menu}', [RecipeController::class, 'store'])->middleware('admin')->name('admin.menu.recipe.store');
-Route::delete('/recipe/{menu}/{recipe}', [RecipeController::class, 'destroy'])->middleware('admin')->name('admin.menu.recipe.destroy');
+    /*
+    | Recipes (belongs to menu)
+    */
+    Route::prefix('menu/{menu}')->name('menu.')->group(function () {
 
-Route::get('/transaction', function () {
-    return view('admin.home');
-})->middleware('admin');
+        Route::get('recipes/create', [RecipeController::class, 'create'])
+            ->name('recipe.create');
 
-Route::post('/login', [UserController::class, 'login']);
-Route::post('/logout', [UserController::class, 'logout']);
+        Route::post('recipes', [RecipeController::class, 'store'])
+            ->name('recipe.store');
+
+        Route::delete('recipes/{recipe}', [RecipeController::class, 'destroy'])
+            ->name('recipe.destroy');
+    });
+
+    
+
+    /*
+    | Transactions
+    */
+    Route::get('transaction', function () {
+        return view('admin.home');
+    })->name('transaction.index');
+});

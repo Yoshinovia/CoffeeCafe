@@ -1,4 +1,3 @@
-
 <div class="h-screen flex">
     <nav class="bg-[#5A9CB5] w-1/5 p-4">
         <div class="container mx-auto flex flex-col items-start">
@@ -10,9 +9,7 @@
             <hr class="m-3">
             
             <a href="/ahome" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Dashboard</a>
-            <a href="{{ route('admin.inventory.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Inventory</a>
-            <a href="{{ route('admin.menu.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Menu</a>
-            <a href="{{ route('admin.transaction.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Transaction</a>
+            <a href="" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Menu</a>
             <hr class="m-3">
             <form action="/logout" method="POST" class="inline ">
                 @csrf
@@ -21,4 +18,4 @@
             
         </div>
     </nav>
-    <div class="flex-1 p-4">
+    <div class="flex-1 p-4"></div>
