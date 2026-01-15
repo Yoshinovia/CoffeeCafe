@@ -7,6 +7,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RecipeController;
 
 use App\Http\Controllers\Kasir\KasirController;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\Admin\InventoryController;
 
 Route::get('/', function () {
@@ -28,6 +29,12 @@ Route::middleware(['auth', 'kasir'])
     ->group(function () {
         Route::get('/', [KasirController::class, 'dashboard'])
             ->name('dashboard');
+
+    Route::get('/transaction', [TransactionController::class, 'index'])
+        ->name('transaction.index');
+
+    Route::post('/transaction', [TransactionController::class, 'store'])
+        ->name('transaction.store');
     });
 
 /*
