@@ -61,7 +61,7 @@
             </td>
 
             <td class="px-6 py-4 text-sm">
-                {{ number_format($inventoryItem->stock, 2) }}
+                {{ number_format($inventoryItem->stock, ) }}
             </td>
 
             <td class="px-6 py-4 text-sm">
@@ -69,7 +69,7 @@
             </td>
 
             <td class="px-6 py-4 text-sm">
-                {{ number_format($inventoryItem->min_stock_alert, 2) }}
+                {{ number_format($inventoryItem->min_stock_alert, ) }}
             </td>
 
             <td class="px-6 py-4 whitespace-nowrap">

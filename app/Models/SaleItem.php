@@ -16,8 +16,13 @@ class SaleItem extends Model
         'subtotal',
     ];
 
-    public function manu()
+    public function menu()
     {
         return $this->belongsTo(Menu::class, 'menu_id');
+    }
+
+    public function sale()
+    {
+        return $this->belongsTo(Sale::class);
     }
 }

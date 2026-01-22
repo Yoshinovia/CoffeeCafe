@@ -8,15 +8,14 @@ use App\Http\Controllers\RecipeController;
 
 use App\Http\Controllers\Kasir\KasirController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\InventoryController;
 
 Route::get('/', function () {
     return view('login');
 });
 
-Route::get('/ahome', function () {
-    return view('admin.home');
-})->middleware('admin');
+Route::get('/ahome', [AdminController::class, 'dashboard'])->middleware('admin')->name('admin.dashboard');
 
 /*
 |--------------------------------------------------------------------------
@@ -103,7 +102,6 @@ Route::middleware(['auth', 'admin'])
     /*
     | Transactions
     */
-    Route::get('transaction', function () {
-        return view('admin.home');
-    })->name('transaction.index');
+    Route::get('transaction', [TransactionController::class, 'adminIndex'])
+        ->name('transaction.index');
 });

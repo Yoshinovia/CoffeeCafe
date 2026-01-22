@@ -7,18 +7,20 @@
             <a href="/ahome" class="text-white text-lg font-bold">CoffeeCafe</a>
             </div>
             <h1 class="text-white font-semibold hover:text-white  py-2">Welcome, {{ auth()->user()->name }}!</h1>
-            <hr class="m-3">
+
             
-            <a href="/ahome" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Dashboard</a>
-            <a href="{{ route('admin.inventory.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Inventory</a>
-            <a href="{{ route('admin.menu.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Menu</a>
-            <a href="{{ route('admin.transaction.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full">Transaction</a>
-            <hr class="m-3">
-            <form action="/logout" method="POST" class="inline ">
-                @csrf
-                <button class="text-white px-3 py-2 active:bg-red-600 w-full hover:bg-[#FA6868] cursor-pointer">Logout</button>
-            </form>
-            
+            <a href="{{ route('admin.dashboard') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full {{ request()->routeIs('admin.dashboard') ? 'bg-white/30' : '' }}">Dashboard</a>
+            <a href="{{ route('admin.inventory.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full {{ request()->routeIs('admin.inventory.index') ? 'bg-white/30' : '' }}">Inventory</a>
+            <a href="{{ route('admin.menu.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full {{ request()->routeIs('admin.menu.index') ? 'bg-white/30' : '' }}">Menu</a>
+            <a href="{{ route('admin.transaction.index') }}" class="text-white px-3 py-2 hover:text-gray-600 hover:bg-[#FACE68] active:bg-[#FACE68] w-full {{ request()->routeIs('admin.transaction.index') ? 'bg-white/30' : '' }}">Transaction</a>
+
+            <div class="mt-auto">
+
+            <form action="/logout" method="POST" class="inline w-full">
+            @csrf
+            <button class="text-white px-3 py-2 w-full text-left rounded-md hover:bg-red-500/50 cursor-pointer">Logout</button>
+        </form>
         </div>
+    </div>
     </nav>
     <div class="flex-1 p-4">
